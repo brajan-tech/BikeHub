@@ -1,0 +1,179 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BikeHub | Service History</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+<style>
+:root{
+    --primary:#22c55e;
+    --accent:#3b82f6;
+    --light-bg:#f8fafc;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:var(--light-bg);
+    background-image:
+        radial-gradient(circle at top right,#dbeafe,transparent 40%),
+        radial-gradient(circle at bottom left,#dcfce7,transparent 40%);
+    color:#0f172a;
+    min-height:100vh;
+}
+
+/* ===== HEADER ===== */
+.page-title{
+    font-weight:700;
+}
+
+/* ===== NEXT SERVICE CARD ===== */
+.next-service{
+    background:linear-gradient(90deg,#22c55e,#3b82f6);
+    color:white;
+    border-radius:18px;
+    padding:16px 24px;
+    font-weight:600;
+    box-shadow:0 15px 35px rgba(59,130,246,.25);
+}
+
+/* ===== SERVICE CARD ===== */
+.history-card{
+    background:white;
+    border-radius:22px;
+    padding:26px;
+    transition:.3s;
+    position:relative;
+    box-shadow:0 20px 40px rgba(0,0,0,.08);
+}
+
+.history-card:hover{
+    transform:translateY(-6px);
+}
+
+/* STATUS BADGE */
+.status-badge{
+    position:absolute;
+    top:0;
+    right:0;
+    padding:6px 18px;
+    border-bottom-left-radius:16px;
+    font-size:.7rem;
+    font-weight:700;
+    text-transform:uppercase;
+    background:#dcfce7;
+    color:#166534;
+}
+
+/* INVOICE BUTTON */
+.btn-invoice{
+    border-radius:999px;
+    padding:8px 18px;
+    font-weight:600;
+    border:1px solid var(--accent);
+    color:var(--accent);
+    background:rgba(59,130,246,.1);
+    text-decoration:none;
+    transition:.3s;
+}
+
+.btn-invoice:hover{
+    background:var(--accent);
+    color:#fff;
+}
+
+/* BACK BUTTON */
+.btn-back{
+    border-radius:999px;
+    padding:6px 18px;
+    font-weight:500;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container py-5 animate__animated animate__fadeInUp">
+
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="page-title">
+            <i class="fa-solid fa-motorcycle me-2 text-success"></i>
+            {{ bike.bike_name }} ({{ bike.bike_number }})
+        </h3>
+        <p class="text-muted mb-0">Service History</p>
+    </div>
+
+    <a href="{% url 'client_bikes' %}" class="btn btn-outline-secondary btn-back">
+        ← Back to Bikes
+    </a>
+</div>
+
+<!-- NEXT SERVICE -->
+{% if next_service_date %}
+<div class="next-service mb-4">
+    <i class="fa-solid fa-bell me-2"></i>
+    Next Service Due:
+    <strong class="ms-2">
+        {{ next_service_date|date:"d M Y" }}
+    </strong>
+</div>
+{% endif %}
+
+<!-- HISTORY LIST -->
+<div class="row g-4">
+
+{% for service in services %}
+<div class="col-lg-6">
+
+    <div class="history-card">
+
+        <div class="status-badge">
+            {{ service.status }}
+        </div>
+
+        <p class="text-muted mb-2">
+            <i class="fa-solid fa-calendar-days me-2"></i>
+            {{ service.created_at|date:"d M Y" }}
+        </p>
+
+        <p class="mb-3">
+            <i class="fa-solid fa-user-gear me-2 text-success"></i>
+            Mechanic:
+            <span class="fw-semibold">
+                {{ service.mechanic|default:"Not assigned" }}
+            </span>
+        </p>
+
+        {% if service.invoice %}
+        <a href="{{ service.invoice.pdf.url }}" class="btn-invoice">
+            <i class="fa-solid fa-download me-1"></i>
+            Download Invoice
+        </a>
+        {% else %}
+        <span class="text-muted">Invoice not available</span>
+        {% endif %}
+
+    </div>
+
+</div>
+{% empty %}
+<div class="col-12 text-center text-muted">
+    No service history found.
+</div>
+{% endfor %}
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

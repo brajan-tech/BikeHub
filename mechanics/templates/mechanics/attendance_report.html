@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BikeHub | Attendance Report</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+:root{
+    --primary:#22c55e;
+    --accent:#3b82f6;
+    --light-bg:#f8fafc;
+}
+
+body{
+    min-height:100vh;
+    background:var(--light-bg);
+    background-image:
+        radial-gradient(circle at top right,#dbeafe,transparent 40%),
+        radial-gradient(circle at bottom left,#dcfce7,transparent 40%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Poppins',sans-serif;
+    color:#0f172a;
+}
+
+/* ===== CARD ===== */
+.report-card{
+    width:100%;
+    max-width:560px;
+    background:white;
+    border-radius:24px;
+    padding:40px 36px;
+    box-shadow:0 30px 60px rgba(0,0,0,.12);
+}
+
+/* ===== HEADER ===== */
+.logo{
+    width:55px;
+    display:block;
+    margin:0 auto 14px;
+}
+
+.gradient-text{
+    background:linear-gradient(90deg,#22c55e,#3b82f6);
+    background-clip:text;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.month-label{
+    font-size:14px;
+    color:#64748b;
+}
+
+/* ===== BADGE ===== */
+.summary-badge{
+    display:inline-block;
+    padding:6px 16px;
+    border-radius:999px;
+    background:rgba(34,197,94,.12);
+    color:#22c55e;
+    font-weight:600;
+    font-size:13px;
+}
+
+/* ===== TABLE ===== */
+.table thead{
+    background:#f1f5f9;
+}
+
+.table th{
+    font-weight:600;
+    color:#475569;
+}
+
+.table td{
+    font-weight:600;
+    text-align:end;
+}
+
+/* ===== COLORS ===== */
+.present{
+    color:#16a34a;
+}
+
+.absent{
+    color:#ef4444;
+}
+
+/* ===== BUTTON ===== */
+.btn-back{
+    margin-top:30px;
+    width:100%;
+    padding:14px;
+    border-radius:999px;
+    background:linear-gradient(90deg,#22c55e,#3b82f6);
+    color:white;
+    border:none;
+    font-weight:600;
+    transition:.3s;
+}
+
+.btn-back:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 30px rgba(59,130,246,.3);
+}
+</style>
+</head>
+
+<body>
+
+<div class="report-card">
+
+    <!-- LOGO -->
+    <img src="{% static 'images/logo.svg' %}" class="logo" alt="BikeHub">
+
+    <!-- TITLE -->
+    <h3 class="text-center fw-bold mb-1">
+        Attendance <span class="gradient-text">Report</span>
+    </h3>
+
+    <p class="text-center month-label mb-3">
+        {{ month_name }} {{ year }}
+    </p>
+
+    <div class="text-center mb-4">
+        <span class="summary-badge">Monthly Summary</span>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-responsive">
+    <table class="table align-middle mb-0">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th class="text-end">Days</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Total Days</td>
+                <td>{{ total_days }}</td>
+            </tr>
+            <tr>
+                <td>Working Days</td>
+                <td>{{ working_days }}</td>
+            </tr>
+            <tr>
+                <td>Sundays</td>
+                <td>{{ sundays }}</td>
+            </tr>
+            <tr>
+                <td>Present Days</td>
+                <td class="present">{{ present_days }}</td>
+            </tr>
+            <tr>
+                <td>Absent Days</td>
+                <td class="absent">{{ absent_days }}</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <!-- BACK BUTTON -->
+    <a href="{% url 'mechanic_dashboard' %}">
+        <button class="btn-back">
+            <i class="bi bi-arrow-left-circle me-2"></i>
+            Back to Dashboard
+        </button>
+    </a>
+
+</div>
+
+</body>
+</html>

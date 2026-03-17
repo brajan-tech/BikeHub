@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BikeHub | My Invoices</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root{
+    --primary:#22c55e;
+    --accent:#3b82f6;
+    --light-bg:#f8fafc;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:var(--light-bg);
+    background-image:
+        radial-gradient(circle at top right,#dbeafe,transparent 40%),
+        radial-gradient(circle at bottom left,#dcfce7,transparent 40%);
+    color:#0f172a;
+    min-height:100vh;
+}
+
+/* ===== GRADIENT TEXT ===== */
+.gradient-text{
+    background:linear-gradient(90deg,#22c55e,#3b82f6);
+    background-clip:text;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* ===== CARD ===== */
+.invoice-card{
+    background:white;
+    border-radius:24px;
+    box-shadow:0 20px 40px rgba(0,0,0,.08);
+}
+
+/* ===== TABLE ===== */
+.table thead{
+    background:#f1f5f9;
+}
+
+.table th{
+    font-weight:600;
+    color:#475569;
+}
+
+/* ===== STATUS BADGE ===== */
+.status-badge{
+    background:#dcfce7;
+    color:#166534;
+    padding:6px 14px;
+    border-radius:999px;
+    font-size:.75rem;
+    font-weight:600;
+}
+
+/* ===== BUTTONS ===== */
+.btn-view{
+    padding:6px 14px;
+    border-radius:999px;
+    border:1px solid var(--accent);
+    color:var(--accent);
+    text-decoration:none;
+    font-size:.85rem;
+    transition:.3s;
+}
+
+.btn-view:hover{
+    background:var(--accent);
+    color:white;
+}
+
+.btn-download{
+    padding:6px 14px;
+    border-radius:999px;
+    background:linear-gradient(90deg,#22c55e,#3b82f6);
+    color:white;
+    text-decoration:none;
+    font-size:.85rem;
+    transition:.3s;
+}
+
+.btn-download:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(59,130,246,.3);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container py-5">
+
+    <h2 class="fw-bold mb-4">
+        My <span class="gradient-text">Invoices</span>
+    </h2>
+
+    {% if invoices %}
+    <div class="invoice-card p-4">
+
+        <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Invoice ID</th>
+                    <th>Bike</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for inv in invoices %}
+                <tr>
+                    <td class="fw-semibold">#{{ inv.id }}</td>
+
+                    <td>{{ inv.service_request.bike }}</td>
+
+                    <td>
+                        <span class="status-badge">
+                            {{ inv.service_request.status }}
+                        </span>
+                    </td>
+
+                    <td class="fw-semibold text-success">
+                        ₹{{ inv.grand_total }}
+                    </td>
+
+                    <td class="text-end">
+                        <a href="{% url 'invoice_detail' inv.id %}"
+                           class="btn-view me-2">
+                            <i class="fa-solid fa-eye me-1"></i> View
+                        </a>
+
+                        <a href="{% url 'invoice_pdf' inv.id %}"
+                           class="btn-download">
+                            <i class="fa-solid fa-download me-1"></i> PDF
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+    </div>
+
+    {% else %}
+    <div class="text-center text-muted mt-5">
+        <i class="fa-solid fa-file-invoice fa-2x mb-3"></i>
+        <p>No invoices available.</p>
+    </div>
+    {% endif %}
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

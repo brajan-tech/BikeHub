@@ -1,0 +1,15 @@
+<h3>Add Parts – {{ service.bike }}</h3>
+
+<form method="post">
+{% csrf_token %}
+
+{{ formset.management_form }}
+
+{% for form in formset %}
+  {{ form.part }}
+  {{ form.quantity }}
+  <hr>
+{% endfor %}
+
+<button type="submit">Save Parts</button>
+</form>

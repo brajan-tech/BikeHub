@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BikeHub | Mechanic Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+:root{
+    --primary:#22c55e;
+    --accent:#3b82f6;
+    --light-bg:#f8fafc;
+}
+
+body{
+    min-height:100vh;
+    background:var(--light-bg);
+    background-image:
+        radial-gradient(circle at top right,#dbeafe,transparent 40%),
+        radial-gradient(circle at bottom left,#dcfce7,transparent 40%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Poppins',sans-serif;
+    color:#0f172a;
+}
+
+/* ===== CARD ===== */
+.login-card{
+    width:100%;
+    max-width:440px;
+    background:white;
+    border-radius:24px;
+    padding:45px 36px;
+    box-shadow:0 30px 60px rgba(0,0,0,.12);
+}
+
+/* ===== LOGO ===== */
+.logo{
+    width:60px;
+    display:block;
+    margin:0 auto 20px;
+}
+
+/* ===== TITLE ===== */
+.gradient-text{
+    background:linear-gradient(90deg,#22c55e,#3b82f6);
+    background-clip:text;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* ===== INPUTS ===== */
+.form-control{
+    border-radius:14px;
+    padding:14px 16px;
+    border:1px solid #e2e8f0;
+}
+
+.form-control:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 0.2rem rgba(34,197,94,0.2);
+}
+
+/* ===== BUTTON ===== */
+.btn-login{
+    width:100%;
+    padding:14px;
+    border-radius:999px;
+    border:none;
+    font-weight:600;
+    background:linear-gradient(90deg,#22c55e,#3b82f6);
+    color:white;
+    transition:.3s;
+}
+
+.btn-login:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 30px rgba(59,130,246,.3);
+}
+
+/* ===== ERROR ===== */
+.error-text{
+    color:#ef4444;
+    text-align:center;
+    margin-top:15px;
+    font-weight:500;
+}
+
+/* ===== BACK LINK ===== */
+.back-link{
+    position:absolute;
+    top:25px;
+    left:25px;
+    color:#64748b;
+    text-decoration:none;
+    font-weight:500;
+}
+
+.back-link:hover{
+    color:var(--primary);
+}
+</style>
+</head>
+
+<body>
+
+<a href="{% url 'home' %}" class="back-link">
+    <i class="bi bi-arrow-left me-1"></i> Home
+</a>
+
+<div class="login-card">
+
+    <!-- LOGO -->
+    <img src="{% static 'images/logo.svg' %}" class="logo" alt="BikeHub">
+
+    <!-- TITLE -->
+    <h3 class="text-center fw-bold mb-2">
+        Mechanic <span class="gradient-text">Login</span>
+    </h3>
+
+    <p class="text-center text-muted mb-4">
+        Access your service dashboard
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <input type="text"
+                   name="username"
+                   class="form-control"
+                   placeholder="Username"
+                   required>
+        </div>
+
+        <div class="mb-4">
+            <input type="password"
+                   name="password"
+                   class="form-control"
+                   placeholder="Password"
+                   required>
+        </div>
+
+        <button type="submit" class="btn-login">
+            <i class="bi bi-box-arrow-in-right me-2"></i>
+            Login
+        </button>
+    </form>
+
+    {% if error %}
+        <p class="error-text">
+            {{ error }}
+        </p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

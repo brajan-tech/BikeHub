@@ -1,0 +1,50 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>📊 Monthly Revenue Report</h1>
+
+<form method="get" style="margin-bottom:15px;">
+    Month:
+    <select name="month">
+        {% for num, name in months %}
+        <option value="{{ num }}" {% if num == selected_month %}selected{% endif %}>
+            {{ name }}
+        </option>
+        {% endfor %}
+    </select>
+
+    Year:
+    <input type="number" name="year" value="{{ year }}">
+
+    <button class="button">Filter</button>
+</form>
+
+<ul>
+    <li><strong>Total Bikes Serviced:</strong> {{ total_bikes }}</li>
+    <li><strong>Total Labour Revenue:</strong> ₹{{ total_labour }}</li>
+    <li><strong>Total Spare Cost:</strong> ₹{{ total_spare }}</li>
+    <li><strong>Total Revenue:</strong> ₹{{ total_revenue }}</li>
+</ul>
+
+<h2>🔧 Mechanic-wise Performance</h2>
+
+<table class="admin-table" border="1" cellpadding="8">
+    <tr>
+        <th>Mechanic</th>
+        <th>Bikes Done</th>
+        <th>Labour Revenue</th>
+    </tr>
+    {% for row in mechanic_data %}
+    <tr>
+        <td>{{ row.service_request__mechanic__user__username }}</td>
+        <td>{{ row.bikes_done }}</td>
+        <td>₹{{ row.labour_revenue }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="3">No data available</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

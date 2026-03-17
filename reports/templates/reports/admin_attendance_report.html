@@ -1,0 +1,59 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Monthly Attendance Report</h1>
+
+<form method="get" style="margin-bottom: 20px;">
+    <label>Month:</label>
+    <select name="month">
+        {% for num, name in months %}
+            <option value="{{ num }}" {% if num == selected_month %}selected{% endif %}>
+                {{ name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label>Year:</label>
+    <select name="year">
+        {% for y in years %}
+            <option value="{{ y }}" {% if y == year %}selected{% endif %}>
+                {{ y }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label>Mechanic:</label>
+    <select name="mechanic">
+        <option value="">All Mechanics</option>
+        {% for mech in mechanics %}
+            <option value="{{ mech.id }}" {% if mech.id|stringformat:"s" == selected_mechanic %}selected{% endif %}>
+                {{ mech.user.username }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <input type="submit" value="Generate Report" class="button">
+</form>
+
+<hr>
+
+<p><b>Total Days:</b> {{ total_days }}</p>
+<p><b>Sundays:</b> {{ sundays }}</p>
+<p><b>Working Days:</b> {{ working_days }}</p>
+
+<table class="admin-table" border="1" cellpadding="8">
+    <tr>
+        <th>Mechanic</th>
+        <th>Present Days</th>
+        <th>Absent Days</th>
+    </tr>
+    {% for row in report %}
+    <tr>
+        <td>{{ row.mechanic }}</td>
+        <td>{{ row.present }}</td>
+        <td>{{ row.absent }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

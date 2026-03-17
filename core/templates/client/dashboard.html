@@ -1,0 +1,273 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BikeHub | Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root{
+    --primary:#22c55e;
+    --accent:#3b82f6;
+    --light-bg:#f8fafc;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:var(--light-bg);
+    background-image:
+        radial-gradient(circle at top right,#dbeafe,transparent 40%),
+        radial-gradient(circle at bottom left,#dcfce7,transparent 40%);
+    color:#0f172a;
+    min-height:100vh;
+}
+
+/* ===== NAVBAR ===== */
+.navbar{
+    background:white;
+    box-shadow:0 4px 20px rgba(0,0,0,.05);
+}
+.navbar-brand img{
+    width:45px;
+}
+
+/* ===== HEADER ===== */
+.dash-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:40px 0;
+}
+
+.dash-title h1{
+    font-size:2.2rem;
+    font-weight:800;
+}
+
+.gradient-text{
+    background: linear-gradient(90deg,#22c55e,#3b82f6);
+    background-clip: text;              /* standard */
+    -webkit-background-clip: text;      /* chrome/safari */
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+
+/* ===== BUTTONS ===== */
+.btn-action{
+    padding:12px 24px;
+    border-radius:14px;
+    font-weight:600;
+    display:inline-flex;
+    gap:10px;
+    align-items:center;
+    transition:.3s;
+    text-decoration:none;
+}
+
+.btn-green{
+    border:1px solid var(--primary);
+    color:var(--primary);
+    background:rgba(34,197,94,.1);
+}
+
+.btn-green:hover{
+    background:var(--primary);
+    color:#fff;
+}
+
+.btn-blue{
+    background:linear-gradient(90deg,#22c55e,#3b82f6);
+    color:#fff;
+}
+
+.btn-blue:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 25px rgba(59,130,246,.3);
+}
+
+/* ===== SERVICE CARD ===== */
+.service-card{
+    background:white;
+    border-radius:24px;
+    padding:28px;
+    margin-bottom:30px;
+    box-shadow:0 20px 40px rgba(0,0,0,.08);
+    transition:.3s;
+    position:relative;
+}
+
+.service-card:hover{
+    transform:translateY(-6px);
+}
+
+/* STATUS TAG */
+.card-tag{
+    position:absolute;
+    top:0;
+    right:0;
+    padding:8px 18px;
+    border-bottom-left-radius:18px;
+    font-size:.7rem;
+    font-weight:700;
+    text-transform:uppercase;
+    background:#dcfce7;
+    color:#166534;
+}
+
+/* ===== PHOTO ===== */
+.photo-wrapper{
+    height:180px;
+    border-radius:20px;
+    overflow:hidden;
+    background:#f1f5f9;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.photo-wrapper img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:transform .4s ease;
+}
+
+.service-card:hover img{
+    transform:scale(1.05);
+}
+
+.photo-placeholder{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    color:#94a3b8;
+}
+
+/* ===== INVOICE ===== */
+.invoice-box{
+    margin-top:15px;
+    padding:12px;
+    background:#f8fafc;
+    border-radius:14px;
+    display:flex;
+    justify-content:space-between;
+}
+
+.invoice-box a{
+    color:var(--accent);
+    font-weight:600;
+    text-decoration:none;
+}
+
+.invoice-box a:hover{
+    text-decoration:underline;
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg">
+<div class="container">
+<a class="navbar-brand" href="#">
+<img src="{% static 'images/logo.svg' %}">
+</a>
+
+<div class="ms-auto d-flex align-items-center gap-3">
+
+<span class="fw-semibold">
+Hi, <span class="text-success">{{ request.user.username }}</span> 👋
+</span>
+
+<a href="{% url 'client_bikes' %}" class="btn btn-sm btn-outline-success rounded-pill px-3">
+<i class="fa-solid fa-clock-rotate-left me-1"></i> History
+</a>
+
+<a href="{% url 'home' %}" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+Logout
+</a>
+
+</div>
+</div>
+</nav>
+
+<div class="container">
+
+<div class="dash-header">
+<div class="dash-title">
+<h1>My <span class="gradient-text">Requests</span></h1>
+<p class="text-muted mb-0">Track and manage your bike services</p>
+</div>
+
+<div class="d-flex gap-3">
+<a href="{% url 'add_bike' %}" class="btn-action btn-green">
+<i class="fa-solid fa-plus"></i> Add Bike
+</a>
+
+<a href="{% url 'book_service' %}" class="btn-action btn-blue">
+<i class="fa-solid fa-tools"></i> Book Service
+</a>
+</div>
+</div>
+
+<div class="row">
+{% for service in services %}
+<div class="col-lg-6">
+<div class="service-card h-100">
+
+<div class="card-tag">{{ service.status }}</div>
+
+<div class="row g-4 align-items-center">
+<div class="col-md-7">
+<h5 class="text-success fw-bold">
+<i class="fa-solid fa-motorcycle me-2"></i>
+{{ service.bike }}
+</h5>
+
+<p class="text-muted">{{ service.problem_description }}</p>
+
+{% if service.status == 'completed' %}
+<div class="invoice-box">
+<a href="{% url 'invoice_detail' service.invoice.id %}">
+<i class="fa-solid fa-file-invoice"></i> Invoice
+</a>
+
+<a href="{% url 'invoice_pdf' service.invoice.id %}">
+<i class="fa-solid fa-download"></i> PDF
+</a>
+</div>
+{% endif %}
+</div>
+
+<div class="col-md-5">
+<div class="photo-wrapper">
+{% if service.work_photo %}
+<img src="{{ service.work_photo.url }}">
+{% else %}
+<div class="photo-placeholder">
+<i class="fa-solid fa-camera"></i>
+<span>No service photo</span>
+</div>
+{% endif %}
+</div>
+</div>
+
+</div>
+</div>
+</div>
+{% endfor %}
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<h2>Service Requests</h2>
+
+<table border="1">
+<tr>
+    <th>User</th>
+    <th>Bike</th>
+    <th>Problem</th>
+    <th>Status</th>
+    <th>Assign Mechanic</th>
+</tr>
+
+{% for service in services %}
+<tr>
+    <td>{{ service.user.username }}</td>
+    <td>{{ service.bike.bike_name }} ({{ service.bike.bike_number }})</td>
+    <td>{{ service.problem_description }}</td>
+    <td>{{ service.status }}</td>
+
+    <td>
+        <form method="post" action="{% url 'assign_mechanic' service.id %}">
+            {% csrf_token %}
+            <select name="mechanic">
+                {% for mech in mechanics %}
+                    <option value="{{ mech.id }}">{{ mech.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Assign</button>
+        </form>
+    </td>
+</tr>
+{% endfor %}
+</table>

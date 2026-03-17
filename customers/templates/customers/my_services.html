@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BikeHub | My Service Requests</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root{
+    --primary:#22c55e;
+    --accent:#3b82f6;
+    --light-bg:#f8fafc;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:var(--light-bg);
+    background-image:
+        radial-gradient(circle at top right,#dbeafe,transparent 40%),
+        radial-gradient(circle at bottom left,#dcfce7,transparent 40%);
+    color:#0f172a;
+    min-height:100vh;
+}
+
+/* ===== GRADIENT TEXT ===== */
+.gradient-text{
+    background:linear-gradient(90deg,#22c55e,#3b82f6);
+    background-clip:text;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* ===== SERVICE CARD ===== */
+.service-card{
+    background:white;
+    border-radius:24px;
+    padding:28px;
+    margin-bottom:30px;
+    box-shadow:0 20px 40px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.service-card:hover{
+    transform:translateY(-6px);
+}
+
+/* STATUS BADGE */
+.status-badge{
+    display:inline-block;
+    padding:6px 16px;
+    border-radius:999px;
+    font-size:.75rem;
+    font-weight:600;
+    background:#dcfce7;
+    color:#166534;
+    margin-bottom:12px;
+}
+
+/* PROGRESS CARD */
+.progress-card{
+    background:#f8fafc;
+    border-radius:18px;
+    padding:18px;
+    margin-top:15px;
+}
+
+/* PHOTO */
+.photo-wrapper{
+    height:160px;
+    border-radius:14px;
+    overflow:hidden;
+    background:#e2e8f0;
+    margin-top:10px;
+}
+
+.photo-wrapper img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.no-data{
+    text-align:center;
+    color:#64748b;
+    margin-top:40px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container py-5">
+
+    <h2 class="fw-bold mb-4">
+        My <span class="gradient-text">Service Requests</span>
+    </h2>
+
+    {% for service in services %}
+
+    <div class="service-card">
+
+        <h5 class="fw-bold text-success">
+            <i class="fa-solid fa-motorcycle me-2"></i>
+            {{ service.bike }}
+        </h5>
+
+        <div class="status-badge">
+            {{ service.status }}
+        </div>
+
+        <h6 class="mt-3 fw-semibold">
+            <i class="fa-solid fa-gear me-2 text-primary"></i>
+            Work Progress
+        </h6>
+
+        {% for progress in service.progress_updates.all %}
+
+            <div class="progress-card">
+
+                <p class="mb-1">
+                    <strong>Status:</strong> {{ progress.status }}
+                </p>
+
+                <p class="text-muted mb-2">
+                    {{ progress.note }}
+                </p>
+
+                {% if progress.photo %}
+                <div class="photo-wrapper">
+                    <img src="{{ progress.photo.url }}">
+                </div>
+                {% endif %}
+
+                <small class="text-muted d-block mt-2">
+                    <i class="fa-solid fa-clock me-1"></i>
+                    {{ progress.updated_at }}
+                </small>
+
+            </div>
+
+        {% empty %}
+            <p class="text-muted mt-3">No updates yet</p>
+        {% endfor %}
+
+    </div>
+
+    {% empty %}
+        <div class="no-data">
+            <i class="fa-solid fa-box-open fa-2x mb-3"></i>
+            <p>No services found</p>
+        </div>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

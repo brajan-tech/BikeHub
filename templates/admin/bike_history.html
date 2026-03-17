@@ -1,0 +1,30 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Bike Service History</h1>
+
+<p><b>Bike:</b> {{ bike.bike_name }} ({{ bike.bike_number }})</p>
+<p><b>Owner:</b> {{ bike.user.username }}</p>
+
+<hr>
+
+{% for s in history %}
+    <p><b>Date:</b> {{ s.date|date:"d M Y" }}</p>
+    <p><b>Problem:</b> {{ s.problem }}</p>
+    <p><b>Mechanic:</b> {{ s.mechanic }}</p>
+
+    <b>Spare Parts Used:</b>
+    <ul>
+        {% for p in s.parts %}
+            <li>{{ p.spare_part.name }} - {{ p.quantity }}</li>
+        {% empty %}
+            <li>No parts used</li>
+        {% endfor %}
+    </ul>
+    <hr>
+{% empty %}
+<p>No service history found.</p>
+{% endfor %}
+
+{% endblock %}

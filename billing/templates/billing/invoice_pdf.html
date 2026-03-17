@@ -1,0 +1,193 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>BikeHub Invoice</title>
+
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 12px;
+            color: #000;
+        }
+
+        .invoice-box {
+            width: 100%;
+            padding: 20px;
+        }
+
+        .header {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .header-table {
+            width: 100%;
+        }
+
+        .header-table td {
+            vertical-align: top;
+        }
+
+        .logo {
+            width: 70px;
+        }
+
+        .company-details {
+            text-align: right;
+            font-size: 12px;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 22px;
+            letter-spacing: 1px;
+        }
+
+        .meta {
+            margin-top: 10px;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        .meta strong {
+            display: inline-block;
+            width: 120px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        table th {
+            background: #f2f2f2;
+            border: 1px solid #000;
+            padding: 7px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        table td {
+            border: 1px solid #000;
+            padding: 7px;
+            text-align: center;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .summary {
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .summary td {
+            padding: 6px;
+            font-size: 12px;
+        }
+
+        .summary .label {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .total {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 11px;
+            text-align: center;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="invoice-box">
+
+    <!-- HEADER -->
+    <table class="header-table">
+        <tr>
+            <td>
+                <img src="{% static 'images/logo.svg' %}" class="logo">
+            </td>
+            <td class="company-details">
+                <strong>BikeHub Service Center</strong><br>
+                Professional Bike Care<br>
+                Contact: +91 89037 02490
+            </td>
+        </tr>
+    </table>
+
+    <h1>INVOICE</h1>
+
+    <!-- META -->
+    <div class="meta">
+        <strong>Invoice ID:</strong> {{ invoice.id }} <br>
+        <strong>Bike:</strong> {{ invoice.service_request.bike }} <br>
+        <strong>Status:</strong> {{ invoice.service_request.status|title }}
+    </div>
+
+    <!-- PARTS TABLE -->
+    <table>
+        <thead>
+            <tr>
+                <th>Part Name</th>
+                <th>Quantity</th>
+                <th>Price / Piece</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if part_usages %}
+                {% for p in part_usages %}
+                <tr>
+                    <td>{{ p.spare_part.name }}</td>
+                    <td>{{ p.quantity_used }}</td>
+                    <td>Rs. {{ p.price_per_piece }}</td>
+                    <td>Rs. {{ p.total_price }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4">No spare parts used</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <!-- SUMMARY -->
+    <table class="summary">
+        <tr>
+            <td class="label">Parts Total:</td>
+            <td class="right">Rs. {{ invoice.parts_total }}</td>
+        </tr>
+        <tr>
+            <td class="label">Labour Charge:</td>
+            <td class="right">Rs. {{ invoice.labour_charge }}</td>
+        </tr>
+        <tr>
+            <td class="label total">Grand Total:</td>
+            <td class="right total">Rs. {{ invoice.grand_total }}</td>
+        </tr>
+    </table>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        Thank you for choosing <strong>BikeHub</strong><br>
+        This is a computer-generated invoice.
+    </div>
+
+</div>
+
+</body>
+</html>

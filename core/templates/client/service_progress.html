@@ -1,0 +1,98 @@
+<style>
+  .gradient-text{
+    background:linear-gradient(90deg,#22c55e,#3b82f6);
+    background-clip:text;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.progress-card{
+    background:white;
+    border-radius:22px;
+    padding:24px;
+    box-shadow:0 20px 40px rgba(0,0,0,.08);
+    position:relative;
+    transition:.3s;
+}
+
+.progress-card:hover{
+    transform:translateY(-6px);
+}
+
+.status-badge{
+    position:absolute;
+    top:0;
+    right:0;
+    padding:6px 18px;
+    border-bottom-left-radius:16px;
+    font-size:.7rem;
+    font-weight:700;
+    text-transform:uppercase;
+    background:#dcfce7;
+    color:#166534;
+}
+
+.photo-wrapper{
+    height:180px;
+    border-radius:18px;
+    overflow:hidden;
+    background:#f1f5f9;
+}
+
+.photo-wrapper img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+</style>
+<body>
+<div class="container py-5">
+
+    <h2 class="mb-4 fw-bold">
+        Your <span class="gradient-text">Service Progress</span>
+    </h2>
+
+    {% if progresses %}
+        <div class="row g-4">
+
+        {% for p in progresses %}
+        <div class="col-lg-6">
+
+            <div class="progress-card">
+
+                <div class="status-badge">
+                    {{ p.status }}
+                </div>
+
+                <p class="text-muted mb-2">
+                    <i class="fa-solid fa-note-sticky me-2 text-success"></i>
+                    {{ p.note }}
+                </p>
+
+                {% if p.photo %}
+                <div class="photo-wrapper mb-3">
+                    <img src="{{ p.photo.url }}">
+                </div>
+                {% endif %}
+
+                <p class="small text-muted mb-0">
+                    <i class="fa-solid fa-clock me-1"></i>
+                    {{ p.updated_at }}
+                </p>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+        </div>
+
+    {% else %}
+        <div class="text-center text-muted">
+            No updates yet.
+        </div>
+    {% endif %}
+
+</div>
+</body>
