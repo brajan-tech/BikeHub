@@ -20,3 +20,11 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+    from django.contrib.auth.models import User
+
+    try:
+        if not User.objects.filter(username='admin').exists():
+            User.objects.create_superuser('admin', 'bikehubsince2025@gmail.com', 'admin123')
+    except Exception as e:
+        print(e)
