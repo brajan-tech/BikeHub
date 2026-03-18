@@ -30,7 +30,11 @@ def client_register(request):
         otp = generate_otp()
         EmailOTP.objects.create(user=user, otp=otp)
 
-        send_otp_email(email, otp)
+        try:
+            send_otp_email(email, otp)
+            messages.success(request, "OTP sent to your email.")
+        except Exception:
+            messages.error(request, "Failed to send OTP. Please check your email or try again later.")
 
         request.session["otp_user_id"] = user.id
 

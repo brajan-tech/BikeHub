@@ -37,16 +37,20 @@ Please visit BikeHub to view full invoice details.
 Thank you for choosing BikeHub 
 """
 
-    send_mail(
-        subject="BikeHub – Service Completed & Invoice Summary",
-        message=message,
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[user.email],
-    )
+    try:
+        send_mail(
+            subject="BikeHub – Service Completed & Invoice Summary",
+            message=message,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[user.email],
+        )
+        status = "sent"
+    except Exception:
+        status = "failed"
 
     EmailNotification.objects.create(
         user=user,
         subject="BikeHub – Service Completed & Invoice Summary",
         message="Invoice summary email sent",
-        status="sent",
+        status=status,
     )
