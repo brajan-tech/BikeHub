@@ -1,0 +1,135 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static dashboard_tags %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <meta http-equiv="refresh" content="30">
+    <style>
+        /* Admin Main Content Animations */
+        #content-main {
+            animation: fadeInUp 0.6s ease-out;
+            width: 100%;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-left: 5px solid #22c55e;
+            cursor: default;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(34,197,94,0.15);
+        }
+        
+        .card-title {
+            font-size: 15px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .card-value {
+            font-size: 42px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1;
+        }
+        .card-icon {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 50px;
+            color: rgba(34,197,94,0.1);
+            transition: all 0.3s ease;
+        }
+        .dashboard-card:hover .card-icon {
+            transform: translateY(-50%) scale(1.1);
+            color: rgba(34,197,94,0.2);
+        }
+
+        .alert-card {
+            border-left-color: #ef4444;
+        }
+        .alert-card .card-value {
+            color: #ef4444;
+        }
+        .alert-card .card-icon {
+            color: rgba(239,68,68,0.1);
+        }
+        .alert-card:hover .card-icon {
+            color: rgba(239,68,68,0.2);
+        }
+
+        .info-card {
+            border-left-color: #3b82f6;
+        }
+        .info-card .card-icon {
+            color: rgba(59,130,246,0.1);
+        }
+        .info-card:hover .card-icon {
+            color: rgba(59,130,246,0.2);
+        }
+        
+        /* Hide right sidebar completely as we move everything to main */
+        #content-related {
+            display: none !important;
+        }
+    </style>
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <h1 style="color: #0f172a; font-weight: 700; margin-bottom: 5px; font-size: 28px;">Welcome to BikeHub Dashboard</h1>
+    <p style="color: #64748b; font-size: 15px; margin-bottom: 30px;">Live overview of your garage operations</p>
+
+    {% get_dashboard_metrics as metrics %}
+    
+    <div class="dashboard-grid">
+        <div class="dashboard-card">
+            <div class="card-title">Bikes Inside Garage</div>
+            <div class="card-value">{{ metrics.bikes_in_garage }}</div>
+            <i class="fa-solid fa-motorcycle card-icon"></i>
+        </div>
+
+        <div class="dashboard-card info-card">
+            <div class="card-title">Pending Services</div>
+            <div class="card-value">{{ metrics.pending_services }}</div>
+            <i class="fa-solid fa-clipboard-list card-icon"></i>
+        </div>
+
+        <div class="dashboard-card alert-card">
+            <div class="card-title">Low Stock Parts Alert</div>
+            <div class="card-value">{{ metrics.low_stock_parts }}</div>
+            <i class="fa-solid fa-triangle-exclamation card-icon"></i>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}

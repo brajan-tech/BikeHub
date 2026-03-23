@@ -170,6 +170,17 @@ body{
 .invoice-box a:hover{
     text-decoration:underline;
 }
+
+@media (max-width: 768px) {
+    .dash-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    .photo-wrapper {
+        margin-top: 15px;
+    }
+}
 </style>
 </head>
 
@@ -243,6 +254,15 @@ Logout
 <a href="{% url 'invoice_pdf' service.invoice.id %}">
 <i class="fa-solid fa-download"></i> PDF
 </a>
+
+{% if not service.feedback %}
+<a href="{% url 'submit_feedback' service.id %}" style="color: #eab308;">
+<i class="fa-solid fa-star"></i> Rate
+</a>
+{% else %}
+<span class="text-success" style="font-weight: 600;"><i class="fa-solid fa-check"></i> Rated</span>
+{% endif %}
+
 </div>
 {% endif %}
 </div>

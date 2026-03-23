@@ -13,7 +13,19 @@ from django.contrib.admin.views.decorators import staff_member_required
 # =========================
 
 def home(request):
-    return render(request, 'core/home.html')
+    from .models import Feedback, Enquiry
+    from django.contrib import messages
+    
+    if request.method == "POST":
+        name = request.POST.get('name')
+        phone = request.POST.get('phone_number')
+        message = request.POST.get('message')
+        Enquiry.objects.create(name=name, phone_number=phone, message=message)
+        messages.success(request, "Your enquiry has been submitted. We will call you back shortly!")
+        return redirect('home')
+
+    reviews = Feedback.objects.filter(is_public=True, rating__gte=4).order_by('-created_at')[:3]
+    return render(request, 'core/home.html', {'reviews': reviews})
 
 
 def logout_view(request):
@@ -401,4 +413,27 @@ def client_bike_history(request, bike_id):
         "services": services,
         "next_service_date": next_service_date
     })
+
+@login_required
+def submit_feedback(request, service_id):
+    from .models import Feedback
+    service = get_object_or_404(ServiceRequest, id=service_id, user=request.user, status='completed')
+    
+    # Block if already reviewed
+    if hasattr(service, 'feedback'):
+        return redirect('client_dashboard')
+
+    if request.method == 'POST':
+        rating = int(request.POST.get('rating', 5))
+        comment = request.POST.get('comment', '')
+        
+        Feedback.objects.create(
+            service_request=service,
+            rating=rating,
+            comment=comment,
+            is_public=True
+        )
+        return redirect('client_dashboard')
+
+    return render(request, 'client/submit_feedback.html', {'service': service})
 

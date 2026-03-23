@@ -42,5 +42,6 @@ urlpatterns = [
     path('select-login/', views.select_login, name='select_login'),
     path("client/bikes/", client_bikes, name="client_bikes"),
     path("client/bike/<int:bike_id>/history/", client_bike_history, name="client_bike_history"),
+    path("client/feedback/<int:service_id>/", views.submit_feedback, name="submit_feedback"),
 
 ]

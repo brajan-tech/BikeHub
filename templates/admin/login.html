@@ -1,0 +1,122 @@
+{% extends 'admin/login.html' %}
+{% load i18n static %}
+
+{% block title %}Log in | BikeHub Admin Portal{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { font-family: 'Poppins', sans-serif !important; background: transparent !important; }
+        #header { display: none !important; }
+        .breadcrumbs { display: none !important; }
+        #content { padding: 0 !important; border: none; background: transparent; }
+        #container { min-width: 0 !important; background: transparent !important; }
+        
+        .video-wrapper { position: fixed; inset: 0; z-index: -2; }
+        .video-wrapper video { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); }
+        .video-overlay { position: absolute; inset: 0; background: radial-gradient(circle at top right,#dbeafe,transparent 40%), radial-gradient(circle at bottom left,#dcfce7,transparent 40%), rgba(255,255,255,0.7); }
+        .page-container { position: fixed; z-index: 2; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        
+        .login-card { width: 100%; max-width: 420px; background: white; border-radius: 24px; padding: 40px 30px; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,.15); }
+        .login-card:hover { transform: translateY(-5px); transition: .3s; }
+        
+        /* Form elements */
+        input[type="text"], input[type="password"] {
+            background: #f1f5f9 !important; border: none !important; border-radius: 14px !important; 
+            padding: 14px 44px 14px 16px !important; color: #0f172a !important; width: 100%; height: auto !important; box-sizing: border-box;
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none !important; box-shadow: 0 0 0 2px rgba(34,197,94,.3) !important; background: white !important;
+        }
+        
+        .submit-row input[type="submit"] {
+            width: 100%; padding: 14px !important; border-radius: 999px !important; border: none !important; 
+            font-weight: 600 !important; background: linear-gradient(90deg,#22c55e,#3b82f6) !important; color: white !important;
+            transition: .3s all; margin: 0 !important; height: auto !important; cursor:pointer;
+        }
+        .submit-row input[type="submit"]:hover {
+            transform: scale(1.05); box-shadow: 0 12px 25px rgba(59,130,246,.3) !important;
+        }
+        .submit-row { padding: 0 !important; border: none !important; background: transparent !important; margin: 0 !important; }
+        .form-row { padding: 0 !important; border: none !important; margin-bottom: 18px !important; }
+        .form-row label { display: none !important; }
+    </style>
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login{% endblock %}
+
+{% block content_title %}{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div class="video-wrapper">
+    <video autoplay muted loop playsinline>
+        <source src="{% static 'videos/bike_login.mp4' %}" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+</div>
+
+<div class="page-container">
+    <div class="login-card animate__animated animate__zoomIn">
+        <img src="{% static 'images/logo.svg' %}" style="width:60px; margin-bottom:18px;" alt="BikeHub">
+        
+        <h2 style="font-weight:700; margin-bottom:6px; background:linear-gradient(90deg,#22c55e,#3b82f6); background-clip:text; -webkit-background-clip:text; color:transparent; margin-top:0;">Admin <span>Portal</span></h2>
+        
+        <p style="font-size:14px; color:#64748b; margin-bottom:24px;">Restricted access</p>
+
+        {% if form.errors and not form.non_field_errors %}
+        <p class="errornote" style="color: #dc3545; font-size:13px; margin-bottom:15px; text-align:left;">
+        {% if form.errors.items|length == 1 %}Please correct the error below.{% else %}Please correct the errors below.{% endif %}
+        </p>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+        <p class="errornote" style="color: #dc3545; font-size:13px; margin-bottom:15px; text-align:left;">
+            {{ error }}
+        </p>
+        {% endfor %}
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        <p class="errornote" style="color: #dc3545; font-size:13px; margin-bottom:15px; text-align:left;">
+        You are authenticated as {{ username }}, but are not authorized to access this page.
+        </p>
+        {% endif %}
+
+        <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+            
+            <div style="position:relative; margin-bottom:18px; text-align:left;">
+                {{ form.username.errors }}
+                <input type="text" name="username" class="form-control" placeholder="Admin Username" required id="id_username">
+                <i class="fa-solid fa-user" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); color:#22c55e;"></i>
+            </div>
+            
+            <div style="position:relative; margin-bottom:18px; text-align:left;">
+                {{ form.password.errors }}
+                <input type="password" name="password" class="form-control" placeholder="Admin Password" required id="id_password">
+                <i class="fa-solid fa-lock" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); color:#22c55e;"></i>
+            </div>
+
+            {% url 'admin_password_reset' as password_reset_url %}
+            {% if password_reset_url %}
+            <div style="text-align:right; margin-bottom: 20px;">
+                <a href="{{ password_reset_url }}" style="font-size:13px; color:#3b82f6; text-decoration:none; font-weight:600;">Forgotten password?</a>
+            </div>
+            {% endif %}
+
+            <div class="submit-row">
+                <input type="submit" value="{% translate 'Log in' %}">
+            </div>
+        </form>
+
+        <div style="margin-top:22px; font-size:14px;">
+            <a href="/" style="color:#64748b; font-weight:600; text-decoration:none;"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:'BikeHub Admin' }}{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Brand Colors for Django 3.2+ variables */
+            --primary: #22c55e;
+            --secondary: #1e293b; 
+            --accent: #3b82f6;
+            --primary-fg: #fff;
+
+            --body-fg: #0f172a;
+            --body-bg: #f8fafc;
+            --body-quiet-color: #64748b;
+            --body-loud-color: #0f172a;
+
+            --header-color: #fff;
+            --header-branding-color: #fff;
+            --header-bg: #1e293b;
+            --header-link-color: #f8fafc;
+
+            --breadcrumbs-fg: #64748b;
+            --breadcrumbs-link-fg: #fff;
+            --breadcrumbs-bg: #22c55e;
+            
+            --link-fg: #3b82f6;
+            --link-hover-color: #22c55e;
+            --link-selected-fg: #fff;
+
+            --button-fg: #fff;
+            --button-bg: #22c55e;
+            --button-hover-bg: #1da34e;
+
+            --default-button-bg: #3b82f6;
+            --default-button-hover-bg: #2563eb;
+
+            /* Fonts */
+            --font-family-primary: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-family-monospace: ui-monospace, Menlo, Consolas, "Roboto Mono", "Ubuntu Monospace", "Noto Mono", "Oxygen Mono", "Liberation Mono", monospace;
+        }
+
+        body {
+            font-family: var(--font-family-primary);
+        }
+
+        #header {
+            background: linear-gradient(90deg, #22c55e, #3b82f6) !important;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        div.breadcrumbs {
+            background: white !important;
+            color: #475569 !important;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 12px 20px !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            font-size: 14px;
+        }
+
+        div.breadcrumbs a {
+            color: #3b82f6 !important;
+            font-weight: 500;
+        }
+
+        .module h2, .module caption, .inline-group h2 {
+            background: linear-gradient(90deg, #22c55e, #3b82f6) !important;
+            color: white;
+        }
+
+        a.section:link, a.section:visited {
+            color: white !important;
+        }
+
+        /* Improved Form Inputs inside Admin */
+        input[type=text], input[type=password], input[type=email], input[type=url], input[type=number], input[type=tel], textarea, select, .vTextField {
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            padding: 8px 12px !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+        
+        input[type=text]:focus, input[type=password]:focus, textarea:focus, select:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.3) !important;
+        }
+
+        .button, input[type=submit], input[type=button], .submit-row input, a.button {
+            border-radius: 8px !important;
+            padding: 8px 16px !important;
+            font-weight: 600;
+            transition: 0.2s all;
+            border: none;
+        }
+        
+        .button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover, a.button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        /* Glassmorphism for dashboard modules */
+        .dashboard #content-main .module {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: none;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        #content-related {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+
+        #content-related .module h2 {
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 768px) {
+            #branding div {
+                padding: 10px !important;
+            }
+            #branding h1 {
+                font-size: 1.1rem !important;
+            }
+            div.breadcrumbs {
+                font-size: 12px;
+                padding: 8px 12px !important;
+                white-space: nowrap;
+                overflow-x: auto;
+            }
+            .dashboard #content-main .module {
+                margin-bottom: 15px;
+            }
+            input[type=text], input[type=password], input[type=email], input[type=url], input[type=number], input[type=tel], textarea, select, .vTextField {
+                width: 100% !important;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block branding %}
+<div style="display: flex; align-items: center; gap: 12px; padding: 5px;">
+    <img src="{% static 'images/logo.svg' %}" alt="BikeHub Logo" style="height: 35px; filter: brightness(0) invert(1);">
+    <h1 style="margin: 0; font-weight: 700; font-size: 1.4rem; letter-spacing: 0.5px;">BIKEHUB ADMIN</h1>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

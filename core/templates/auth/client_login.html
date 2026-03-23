@@ -237,7 +237,10 @@ h2 span{
             </button>
         </form>
 
-        <div class="register-link">
+        <div class="register-link" style="margin-bottom: 5px; margin-top: 15px;">
+            <a href="{% url 'password_reset' %}">Forgot Password?</a>
+        </div>
+        <div class="register-link" style="margin-top: 10px;">
             Don’t have an account?
             <a href="{% url 'client_register' %}">Sign Up</a>
         </div>
