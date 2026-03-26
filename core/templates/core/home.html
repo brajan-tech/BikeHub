@@ -138,6 +138,16 @@ body{
     opacity:1;
 }
 
+/* REVIEWS MARQUEE */
+.review-slider{padding:20px 0;overflow:hidden;position:relative;}
+.review-track{display:flex;width:max-content;animation:scrollReviews 30s linear infinite;}
+.review-track:hover{animation-play-state:paused;}
+@keyframes scrollReviews{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+}
+.review-item{width:350px;margin:0 12px;flex-shrink:0;}
+
 /* FOOTER */
 
 footer{
@@ -323,62 +333,58 @@ Certified professionals handle your ride.
 </section>
 
 <!-- REVIEWS -->
-<section class="container py-5">
-    <div class="text-center mb-5" data-aos="fade-up">
+<section class="py-5 bg-white" style="overflow: hidden;">
+    <div class="container text-center mb-5" data-aos="fade-up">
         <h2 class="section-title">
             What Our <span class="gradient-text">Riders Say</span>
         </h2>
     </div>
-    <div class="row g-4 justify-content-center">
-        {% if reviews %}
-            {% for r in reviews %}
-            <div class="col-md-4" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:1 }}50">
-                <div class="feature-box text-center">
-                    <h5 class="fw-bold mb-3 text-capitalize">{{ r.service_request.user.username }}</h5>
-                    <div style="color: #eab308; font-size: 20px; margin-bottom: 15px;">
-                        <!-- Hack to print N stars in Django Template -->
-                        {% with ''|center:r.rating as range %}
-                            {% for _ in range %}<i class="fa-solid fa-star"></i>{% endfor %}
-                        {% endwith %}
+    <div class="review-slider">
+        <div class="review-track">
+            <!-- First Set -->
+            {% if reviews %}
+                {% for r in reviews %}
+                <div class="review-item">
+                    <div class="feature-box text-center shadow-sm">
+                        <h5 class="fw-bold mb-3 text-capitalize">{{ r.service_request.user.username }}</h5>
+                        <div style="color: #eab308; font-size: 20px; margin-bottom: 15px;">
+                            {% with ''|center:r.rating as range %}
+                                {% for _ in range %}<i class="fa-solid fa-star"></i>{% endfor %}
+                            {% endwith %}
+                        </div>
+                        <p class="text-muted fst-italic">"{{ r.comment }}"</p>
+                        <small class="text-success fw-bold mt-2 d-block"><i class="fa-solid fa-motorcycle"></i> {{ r.service_request.bike.bike_name }}</small>
                     </div>
-                    <p class="text-muted fst-italic">"{{ r.comment }}"</p>
-                    <small class="text-success fw-bold mt-2 d-block"><i class="fa-solid fa-motorcycle"></i> {{ r.service_request.bike.bike_name }}</small>
                 </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <!-- DUMMY REVIEWS WHEN REAL DATABASE IS EMPTY -->
-            <div class="col-md-4" data-aos="zoom-in" data-aos-delay="150">
-                <div class="feature-box text-center">
-                    <h5 class="fw-bold mb-3">John Doe</h5>
-                    <div style="color: #eab308; font-size: 20px; margin-bottom: 15px;">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                {% endfor %}
+            {% else %}
+                <div class="review-item"><div class="feature-box text-center shadow-sm"><h5 class="fw-bold mb-3">John Doe</h5><div style="color:#eab308;font-size:20px;margin-bottom:15px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="text-muted fst-italic">"Incredible service! My bike runs smoother than the day I bought it. The 24/7 tracking gave me total peace of mind."</p><small class="text-success fw-bold mt-2 d-block"><i class="fa-solid fa-motorcycle"></i> Yamaha R15</small></div></div>
+                <div class="review-item"><div class="feature-box text-center shadow-sm"><h5 class="fw-bold mb-3">Sarah Smith</h5><div style="color:#eab308;font-size:20px;margin-bottom:15px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="text-muted fst-italic">"Very professional mechanics and transparent pricing. I loved the digital invoice directly to my email."</p><small class="text-success fw-bold mt-2 d-block"><i class="fa-solid fa-motorcycle"></i> Royal Enfield Classic</small></div></div>
+                <div class="review-item"><div class="feature-box text-center shadow-sm"><h5 class="fw-bold mb-3">Alex Kumar</h5><div style="color:#eab308;font-size:20px;margin-bottom:15px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="text-muted fst-italic">"BikeHub is the only garage I trust. They even picked up my bike from my house and dropped it back. Amazing!"</p><small class="text-success fw-bold mt-2 d-block"><i class="fa-solid fa-motorcycle"></i> KTM Duke 390</small></div></div>
+            {% endif %}
+
+            <!-- Second Set -->
+            {% if reviews %}
+                {% for r in reviews %}
+                <div class="review-item">
+                    <div class="feature-box text-center shadow-sm">
+                        <h5 class="fw-bold mb-3 text-capitalize">{{ r.service_request.user.username }}</h5>
+                        <div style="color: #eab308; font-size: 20px; margin-bottom: 15px;">
+                            {% with ''|center:r.rating as range %}
+                                {% for _ in range %}<i class="fa-solid fa-star"></i>{% endfor %}
+                            {% endwith %}
+                        </div>
+                        <p class="text-muted fst-italic">"{{ r.comment }}"</p>
+                        <small class="text-success fw-bold mt-2 d-block"><i class="fa-solid fa-motorcycle"></i> {{ r.service_request.bike.bike_name }}</small>
                     </div>
-                    <p class="text-muted fst-italic">"Incredible service! My bike runs smoother than the day I bought it. The 24/7 tracking gave me total peace of mind."</p>
-                    <small class="text-success fw-bold mt-2 d-block"><i class="fa-solid fa-motorcycle"></i> Yamaha R15</small>
                 </div>
-            </div>
-            <div class="col-md-4" data-aos="zoom-in" data-aos-delay="250">
-                <div class="feature-box text-center">
-                    <h5 class="fw-bold mb-3">Sarah Smith</h5>
-                    <div style="color: #eab308; font-size: 20px; margin-bottom: 15px;">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    </div>
-                    <p class="text-muted fst-italic">"Very professional mechanics and transparent pricing. I loved the digital invoice directly to my email."</p>
-                    <small class="text-success fw-bold mt-2 d-block"><i class="fa-solid fa-motorcycle"></i> Royal Enfield Classic</small>
-                </div>
-            </div>
-            <div class="col-md-4" data-aos="zoom-in" data-aos-delay="350">
-                <div class="feature-box text-center">
-                    <h5 class="fw-bold mb-3">Alex Kumar</h5>
-                    <div style="color: #eab308; font-size: 20px; margin-bottom: 15px;">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    </div>
-                    <p class="text-muted fst-italic">"BikeHub is the only garage I trust. They even picked up my bike from my house and dropped it back. Amazing!"</p>
-                    <small class="text-success fw-bold mt-2 d-block"><i class="fa-solid fa-motorcycle"></i> KTM Duke 390</small>
-                </div>
-            </div>
-        {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="review-item"><div class="feature-box text-center shadow-sm"><h5 class="fw-bold mb-3">John Doe</h5><div style="color:#eab308;font-size:20px;margin-bottom:15px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="text-muted fst-italic">"Incredible service! My bike runs smoother than the day I bought it. The 24/7 tracking gave me total peace of mind."</p><small class="text-success fw-bold mt-2 d-block"><i class="fa-solid fa-motorcycle"></i> Yamaha R15</small></div></div>
+                <div class="review-item"><div class="feature-box text-center shadow-sm"><h5 class="fw-bold mb-3">Sarah Smith</h5><div style="color:#eab308;font-size:20px;margin-bottom:15px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="text-muted fst-italic">"Very professional mechanics and transparent pricing. I loved the digital invoice directly to my email."</p><small class="text-success fw-bold mt-2 d-block"><i class="fa-solid fa-motorcycle"></i> Royal Enfield Classic</small></div></div>
+                <div class="review-item"><div class="feature-box text-center shadow-sm"><h5 class="fw-bold mb-3">Alex Kumar</h5><div style="color:#eab308;font-size:20px;margin-bottom:15px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="text-muted fst-italic">"BikeHub is the only garage I trust. They even picked up my bike from my house and dropped it back. Amazing!"</p><small class="text-success fw-bold mt-2 d-block"><i class="fa-solid fa-motorcycle"></i> KTM Duke 390</small></div></div>
+            {% endif %}
+        </div>
     </div>
 </section>
 
